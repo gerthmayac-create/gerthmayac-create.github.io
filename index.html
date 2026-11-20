@@ -4,254 +4,857 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gerthmay Clair · Data Engineer</title>
-<meta name="description" content="Portafolio de Gerthmay Clair, Data Engineer en Panamá: pipelines, ETL, automatización y herramientas de datos para banca y RRHH.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="description" content="Portafolio de Gerthmay Clair, Data Engineer en Panamá: pipelines, ETL, automatización y herramientas de datos para banca y RRHH." data-i18n-attr="content:meta.desc">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b1424">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gerthmay Clair · Data Engineer">
+<meta property="og:description" content="Portafolio de Gerthmay Clair, Data Engineer en Panamá: pipelines, ETL, automatización y herramientas de datos para banca y RRHH." data-i18n-attr="content:meta.desc">
+<meta property="og:url" content="https://gerthmayac-create.github.io/">
+<meta property="og:locale" content="es_PA">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1424'/%3E%3Cpath d='M6 20h5l3-9 4 14 3-9h5' fill='none' stroke='%23f2a541' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/bricolage-grotesque-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/ibm-plex-sans-latin.woff2">
+<script>document.documentElement.className += " js";</script>
 <style>
-:root{--bg:#0b1424;--bg2:#0f1b2d;--card:#13223a;--line:#22385a;--ink:#f4efe6;--mut:#9fb0c8;--blue:#4ea1ff;--sky:#7fd3ff;--amber:#f2a541;--green:#6fe3a6}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+/* ── Fuentes propias (variables: un archivo por subconjunto cubre todos los pesos) ── */
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("assets/fonts/bricolage-grotesque-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("assets/fonts/bricolage-grotesque-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:100 700;font-display:swap;src:url("assets/fonts/ibm-plex-sans-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:100 700;font-display:swap;src:url("assets/fonts/ibm-plex-sans-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ── Tokens ── */
+:root{
+  --bg:#0b1424;--bg2:#0f1b2d;--raise:#13223a;--line:#22385a;--line-soft:rgba(255,255,255,.07);
+  --ink:#f4efe6;--ink-2:#cdd7e6;--mut:#9fb0c8;--faint:#8497b3;
+  --amber:#f2a541;--amber-hi:#f7b45c;--amber-ink:#1b1305;--sky:#7fd3ff;
+  --font-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --r-lg:20px;--r-md:12px;--r-sm:8px;
+
+  /* Transitions.dev · escala de movimiento compartida */
+  --duration-stagger:40ms;--duration-micro:80ms;--duration-quick:150ms;--duration-fast:250ms;--duration-medium:350ms;--duration-slow:400ms;--duration-very-slow:500ms;
+  --ease-smooth-out:cubic-bezier(0.22,1,0.36,1);--ease-in-out:ease-in-out;--ease-linear:linear;
+  --distance-micro:4px;--distance-base:8px;--distance-medium:12px;
+  --blur-small:2px;--blur-medium:3px;
+
+  /* Transitions.dev · Tabs sliding (colores ajustados al tema oscuro) */
+  --tabs-dur:250ms;--tabs-ease:cubic-bezier(0.22,1,0.36,1);
+  --tabs-text-muted:var(--mut);--tabs-text-active:var(--amber-ink);
+  --tabs-bar-bg:rgba(255,255,255,.07);--tabs-pill-bg:var(--amber);
+  /* Transitions.dev · Text swap soft */
+  --text-soft-dur:200ms;--text-soft-blur:2px;--text-soft-ease:ease-in-out;
+  --text-soft-resize-dur:240ms;--text-soft-resize-ease:cubic-bezier(0.22,1,0.36,1);
+  /* Transitions.dev · Texts reveal */
+  --stagger-dur:500ms;--stagger-distance:12px;--stagger-stagger:40ms;--stagger-blur:3px;--stagger-ease:cubic-bezier(0.22,1,0.36,1);
+  /* Transitions.dev · Accordion expand */
+  --acc-expand:250ms;--acc-collapse:250ms;--acc-chevron:250ms;--acc-ease:cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ── Base ── */
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0;padding:0}
+html{color-scheme:dark;-webkit-text-size-adjust:100%;scrollbar-color:#2a4268 var(--bg);scrollbar-width:thin}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--font-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+::selection{background:rgba(242,165,65,.35);color:#fff}
 a{color:inherit}
-.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-nav{position:sticky;top:0;z-index:10;background:rgba(11,20,36,.82);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-nav .logo{font-weight:800;letter-spacing:-.01em}
-nav .logo span{color:var(--amber)}
-nav ul{display:flex;gap:22px;list-style:none;font-size:14px;color:var(--mut)}
-nav a{text-decoration:none}nav a:hover{color:var(--ink)}
-@media(max-width:640px){nav ul{display:none}}
-header{position:relative;overflow:hidden;padding:96px 0 80px;background:radial-gradient(900px 500px at 80% 0%,rgba(78,161,255,.16),transparent 60%),radial-gradient(700px 400px at 0% 100%,rgba(242,165,65,.10),transparent 60%)}
-header::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(127,211,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,211,255,.05) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(180deg,#000,transparent)}
-.eyebrow{font:600 13px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
-h1{font-size:clamp(38px,6vw,68px);line-height:1.04;font-weight:800;letter-spacing:-.03em;margin:16px 0 22px;max-width:820px}
-h1 em{font-style:normal;background:linear-gradient(90deg,var(--blue),var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{font-size:19px;color:var(--mut);max-width:680px}
-.cta{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .15s}
-.btn:hover{transform:translateY(-2px)}
-.btn.p{background:var(--amber);color:#1b1305}
-.btn.s{border:1px solid var(--line);background:rgba(255,255,255,.03)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px}
-@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{background:rgba(19,34,58,.7);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
-.stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em}
-.stat span{font-size:13.5px;color:var(--mut)}
-section{padding:88px 0;border-top:1px solid rgba(255,255,255,.05)}
-h2{font-size:clamp(28px,4vw,38px);line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:10px 0 14px}
-.sub{color:var(--mut);max-width:640px;margin-bottom:40px}
-.about{display:grid;grid-template-columns:1.2fr 1fr;gap:40px}
-@media(max-width:860px){.about{grid-template-columns:1fr}}
-.about p{color:#cdd7e6;margin-bottom:16px}
-.tl{border-left:2px solid var(--line);padding-left:22px}
-.tl div{position:relative;margin-bottom:20px}
-.tl div::before{content:"";position:absolute;left:-29px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--line)}
-.tl div.now::before{border-color:var(--amber);background:var(--amber)}
-.tl b{display:block;font-size:15.5px}.tl span{font-size:13.5px;color:var(--mut)}
-.stack{display:flex;flex-wrap:wrap;gap:10px}
-.chip{font:500 14px "JetBrains Mono",ui-monospace,Menlo,monospace;padding:8px 14px;border-radius:999px;border:1px solid rgba(127,211,255,.28);background:rgba(78,161,255,.07);color:#d6eaff}
-.chip.a{border-color:rgba(242,165,65,.4);background:rgba(242,165,65,.08);color:#ffd9a0}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-@media(max-width:860px){.grid{grid-template-columns:1fr}}
-.case{background:linear-gradient(180deg,rgba(19,34,58,.95),rgba(15,27,45,.95));border:1px solid var(--line);border-radius:20px;padding:26px;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
-.case:hover{border-color:#2f6db0;transform:translateY(-3px)}
-.case .k{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.case .tag{font:600 12px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
-.case .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#1a2f4f}
-.case h3{font-size:21px;line-height:1.25;letter-spacing:-.01em;margin-bottom:12px}
-.case .row{margin-bottom:10px;font-size:15px;color:#cdd7e6}
-.case .row b{color:var(--ink);font-weight:600}
-.case ul{margin:4px 0 14px 18px;font-size:14.5px;color:#cdd7e6}
-.case li{margin-bottom:4px}
-.case .tech{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:14px}
-.case .tech span{font:500 12px "JetBrains Mono",ui-monospace,Menlo,monospace;padding:4px 9px;border-radius:6px;background:#0f1b2d;border:1px solid var(--line);color:var(--mut)}
-.more{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-@media(max-width:860px){.more{grid-template-columns:1fr}}
-.mini{border:1px solid var(--line);border-radius:16px;padding:18px 20px;background:rgba(19,34,58,.5)}
-.mini b{display:block;margin-bottom:6px}
-.mini p{font-size:14px;color:var(--mut)}
-.note{margin-top:26px;font-size:14px;color:var(--mut);border-left:3px solid var(--amber);padding:6px 0 6px 14px}
-.pub{display:flex;gap:24px;align-items:center;background:linear-gradient(120deg,#1a2f4f,#13223a);border:1px solid #2f6db0;border-radius:20px;padding:28px}
-@media(max-width:700px){.pub{flex-direction:column;align-items:flex-start}}
-.pub p{color:#cdd7e6;margin-top:6px}
-footer{padding:70px 0 50px;border-top:1px solid rgba(255,255,255,.05)}
-footer h2{margin-bottom:10px}
-footer small{display:block;margin-top:40px;color:#5f6f86;font-size:13px}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance}
+p,li{text-wrap:pretty}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.skip{position:absolute;left:16px;top:-64px;z-index:50;padding:12px 18px;border-radius:var(--r-md);background:var(--amber);color:var(--amber-ink);font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
+
+/* ── Botones ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border:0;border-radius:var(--r-md);font:600 15px/1 var(--font-body);text-decoration:none;cursor:pointer;color:var(--ink);
+  transition:transform var(--duration-quick) var(--ease-smooth-out),background-color var(--duration-quick) var(--ease-smooth-out),box-shadow var(--duration-quick) var(--ease-smooth-out)}
+.btn:active{transform:scale(.96)}
+.btn .ic{transition:transform var(--duration-fast) var(--ease-smooth-out)}
+.btn.p{background:var(--amber);color:var(--amber-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 8px 18px -8px rgba(0,0,0,.6)}
+.btn.s{background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(127,160,210,.24),0 1px 2px rgba(0,0,0,.3)}
+.btn.sm{min-height:40px;padding:0 16px;font-size:14px}
+@media (hover:hover){
+  .btn.p:hover{background:var(--amber-hi)}
+  .btn.s:hover{background:rgba(255,255,255,.08);box-shadow:0 0 0 1px rgba(127,211,255,.5),0 1px 2px rgba(0,0,0,.3)}
+  .btn:hover .ic{transform:translateX(3px)}
+  .btn .ic-down{transition:none}.btn:hover .ic-down{transform:translateY(3px)}
+}
+
+/* ── Navegación ── */
+nav.top{position:sticky;top:0;z-index:20;background:rgba(11,20,36,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
+.bar{display:flex;align-items:center;gap:8px;height:60px}
+.brand{display:flex;align-items:baseline;gap:10px;padding:13px 0;text-decoration:none;font:800 17px/1 var(--font-display);letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:none;font:500 13px var(--font-body);color:var(--mut);letter-spacing:0}
+.links{display:none;list-style:none}
+.links a,.menu-list a:not(.btn){display:block;padding:10px 12px;border-radius:10px;font-size:14px;color:var(--mut);text-decoration:none;transition:color var(--duration-quick) var(--ease-smooth-out),background-color var(--duration-quick) var(--ease-smooth-out)}
+.links a[aria-current],.menu-list a[aria-current]{color:var(--ink);background:rgba(255,255,255,.06)}
+@media (hover:hover){.links a:hover,.menu-list a:not(.btn):hover{color:var(--ink)}}
+.bar-end{margin-left:auto;display:flex;align-items:center;gap:10px}
+.cta-nav{display:none}
+@media (min-width:720px){.brand small{display:inline}.cta-nav{display:inline-flex}}
+@media (min-width:860px){.links{display:flex;gap:2px;margin-left:auto}.bar-end{margin-left:0}.navmenu{display:none}.bar{gap:16px}}
+
+/* Menú móvil: usa la mecánica de Accordion expand */
+.menu-btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 6px 0 12px;border:0;border-radius:var(--r-md);background:rgba(255,255,255,.07);color:var(--ink);font:600 14px/1 var(--font-body);cursor:pointer}
+.menu-btn .t-acc-chevron{width:28px;height:28px;display:inline-grid;place-items:center}
+.menu-btn .ic{width:16px;height:16px}
+.navmenu .t-acc-panel{position:absolute;left:0;right:0;top:100%}
+.navmenu .t-acc-panel-inner{background:var(--bg)}
+.menu-list{list-style:none;display:grid;gap:2px;padding:10px clamp(16px,4vw,32px) 18px;border-bottom:1px solid var(--line-soft)}
+.menu-list a:not(.btn){padding:14px 12px;font-size:16px}
+.menu-list .btn{margin-top:10px;width:100%}
+
+/* Interruptor de idioma: Tabs sliding */
+.t-tabs{position:relative;display:inline-flex;align-items:center;gap:3px;padding:3px;border-radius:48px;background:var(--tabs-bar-bg)}
+.t-tab{position:relative;appearance:none;border:0;background:transparent;height:30px;min-width:38px;padding:4px 10px;color:var(--tabs-text-muted);cursor:pointer;border-radius:48px;z-index:1;font:600 13px/1 var(--font-body);letter-spacing:.04em;transition:color var(--tabs-dur) var(--tabs-ease)}
+.t-tab::before{content:"";position:absolute;inset:-6px 0}
+.t-tab:not([aria-pressed="true"]):hover,.t-tab[aria-pressed="true"]{color:var(--tabs-text-active)}
+.t-tab:not([aria-pressed="true"]):hover{color:var(--ink)}
+.t-tabs-pill{position:absolute;top:3px;left:0;height:30px;width:0;background:var(--tabs-pill-bg);border-radius:48px;transform:translateX(0);transition:transform var(--tabs-dur) var(--tabs-ease),width var(--tabs-dur) var(--tabs-ease);will-change:transform,width;z-index:0;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.t-tabs-pill,.t-tab{transition:none !important}}
+
+/* Text swap soft: etiquetas cortas que cambian de ancho entre idiomas */
+.t-text-soft{display:inline-grid;justify-items:var(--text-soft-align,start);transition:width var(--text-soft-resize-dur) var(--text-soft-resize-ease)}
+.t-text-soft>span{grid-area:1/1;white-space:pre;transition:filter var(--text-soft-dur) var(--text-soft-ease),opacity var(--text-soft-dur) var(--text-soft-ease)}
+.t-text-soft-new{opacity:0;filter:blur(var(--text-soft-blur))}
+.t-text-soft.is-swapping .t-text-soft-old{opacity:0;filter:blur(var(--text-soft-blur))}
+.t-text-soft.is-swapping .t-text-soft-new{opacity:1;filter:blur(0)}
+@media (prefers-reduced-motion:reduce){.t-text-soft,.t-text-soft>span{transition:none !important}}
+
+/* Cambio de idioma en bloques de texto: mismo desenfoque y tiempo que Text swap soft */
+[data-i18n]:not(.t-text-soft){transition:opacity var(--text-soft-dur) var(--text-soft-ease),filter var(--text-soft-dur) var(--text-soft-ease)}
+.lang-out [data-i18n]:not(.t-text-soft){opacity:0;filter:blur(var(--blur-small));transition-duration:var(--duration-quick)}
+@media (prefers-reduced-motion:reduce){[data-i18n]{transition:none !important}}
+
+/* ── Secciones ── */
+section[id],header[id]{scroll-margin-top:68px}
+.sec{padding:clamp(48px,6vw,80px) 0;border-top:1px solid var(--line-soft)}
+h2{font-weight:800;font-size:clamp(30px,4.2vw,46px);line-height:1.08;letter-spacing:-.022em;margin-bottom:14px;max-width:22ch}
+.sub{color:var(--mut);max-width:62ch}
+/* Título + subtítulo en la misma fila para aprovechar el ancho */
+.sec-head{display:grid;gap:12px 48px;margin-bottom:clamp(24px,3.5vw,36px)}
+.sec-head h2{margin:0}
+@media (min-width:900px){.sec-head{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px;align-items:end}.sec-head .sub{padding-bottom:6px}}
+
+/* ── Hero ── */
+.hero{padding:clamp(40px,6vw,80px) 0 clamp(48px,6vw,72px)}
+
+/* ── Fondo en tres capas (todo dibujado por código, sin imágenes de terceros) ──
+   1) .bg-fixed: curvas de nivel del "data lake" y brillos de color, fijos en la ventana con un leve desplazamiento
+   2) lagos más intensos en el hero y en el contacto
+   3) .spine: un "pipeline" vertical en el margen izquierdo con un nodo por sección (solo pantallas anchas) */
+.bg-fixed{position:fixed;left:0;right:0;top:-8vh;height:116vh;z-index:-1;pointer-events:none;transform:translate3d(0,var(--par,0px),0);
+  background:radial-gradient(900px 620px at 8% 12%,rgba(78,161,255,.13),transparent 70%),radial-gradient(900px 640px at 94% 62%,rgba(242,165,65,.09),transparent 70%)}
+.bg-fixed::after{content:"";position:absolute;inset:0;background:url("assets/bg/lake-page.svg") center/cover no-repeat;opacity:.5;
+  -webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,0,.3) 24%,rgba(0,0,0,.3) 76%,#000 100%);mask-image:linear-gradient(90deg,#000 0,rgba(0,0,0,.3) 24%,rgba(0,0,0,.3) 76%,#000 100%)}
+@media (max-width:859px){.bg-fixed::after{opacity:.4;-webkit-mask-image:none;mask-image:none}}
+.hero,.contact{position:relative;overflow:hidden;isolation:isolate}
+/* En el hero y en el contacto manda su propio lago: tapan la capa general para que no se superpongan dos dibujos,
+   y se desvanecen hacia la sección vecina para que la transición no tenga un corte. */
+.hero{background:linear-gradient(180deg,var(--bg) 0,var(--bg) calc(100% - 90px),rgba(11,20,36,0) 100%)}
+.contact{background:linear-gradient(180deg,rgba(11,20,36,0) 0,var(--bg) 110px,var(--bg) 100%)}
+.sec{position:relative}
+.hero>.wrap,.contact>.wrap{position:relative;z-index:1}
+.bg-lake{position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-size:cover}
+.hero::before,.contact::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none}
+.hero::before{background:radial-gradient(900px 520px at 78% 32%,rgba(78,161,255,.16),transparent 68%)}
+.hero .bg-lake{background-image:url("assets/bg/lake-hero.svg");background-position:72% 50%;opacity:.7;
+  -webkit-mask-image:radial-gradient(ellipse 60% 95% at 78% 46%,#000 18%,transparent 78%);mask-image:radial-gradient(ellipse 60% 95% at 78% 46%,#000 18%,transparent 78%)}
+.contact::before{background:radial-gradient(900px 420px at 50% 105%,rgba(242,165,65,.12),transparent 70%)}
+.contact .bg-lake{background-image:url("assets/bg/lake-contact.svg");background-position:50% 100%;opacity:.7;
+  -webkit-mask-image:radial-gradient(ellipse 50% 105% at 88% 100%,#000 10%,transparent 78%);mask-image:radial-gradient(ellipse 50% 105% at 88% 100%,#000 10%,transparent 78%)}
+@media (max-width:859px){.hero .bg-lake{background-position:62% 70%;opacity:.6}}
+/* Tonos distintos por sección para cortar la monotonía del azul liso */
+#stack{background:linear-gradient(180deg,rgba(19,34,58,.6),rgba(19,34,58,0) 85%)}
+#sobre-mi{background:radial-gradient(760px 460px at 0% 100%,rgba(242,165,65,.08),transparent 70%)}
+/* Pipeline vertical en el margen */
+main{position:relative}
+.spine{display:none}
+@media (min-width:1320px){
+  .spine{display:block;position:absolute;z-index:0;top:0;bottom:0;left:calc(50% - 640px);width:2px;pointer-events:none;background:linear-gradient(180deg,transparent 0,var(--line) 140px,var(--line) calc(100% - 140px),transparent 100%)}
+  .spine::after{content:"";position:absolute;left:-3px;top:0;width:8px;height:8px;border-radius:50%;background:var(--amber);opacity:0;animation:spine 18s linear infinite}
+  .sec::after{content:"";position:absolute;left:calc(50% - 640px - 5px);top:88px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--line);transition:background-color var(--duration-fast) var(--ease-smooth-out),border-color var(--duration-fast) var(--ease-smooth-out)}
+  .sec.is-current::after{background:var(--amber);border-color:var(--amber)}
+}
+@keyframes spine{0%{top:0;opacity:0}5%{opacity:.9}95%{opacity:.9}100%{top:calc(100% - 8px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.spine::after{animation:none !important}.bg-fixed{transform:none !important}}
+.hero-grid{display:grid;gap:clamp(36px,5vw,56px);grid-template-columns:minmax(0,1fr)}
+@media (min-width:980px){.hero-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center}}
+h1{font-weight:800;font-size:clamp(38px,5vw,64px);line-height:1.04;letter-spacing:-.028em}
+h1 em{font-style:normal;color:var(--amber)}
+.lead{margin-top:24px;font-size:clamp(17px,1.5vw,19px);color:var(--ink-2);max-width:58ch}
+.who{margin-top:14px;font-weight:500;color:var(--ink);max-width:58ch}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.proof{margin-top:34px;padding-top:18px;border-top:1px solid var(--line-soft);font-size:14.5px;color:var(--mut);max-width:64ch}
+.num{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* Texts reveal (momento de entrada del hero) */
+.t-stagger-line{display:block}
+.js .t-stagger-line{opacity:0;transform:translateY(var(--stagger-distance));filter:blur(var(--stagger-blur));transition:opacity var(--stagger-dur) var(--stagger-ease),transform var(--stagger-dur) var(--stagger-ease),filter var(--stagger-dur) var(--stagger-ease);will-change:transform,opacity,filter}
+.js .t-stagger-line--2{transition-delay:var(--stagger-stagger)}
+.js .t-stagger-line--3{transition-delay:calc(var(--stagger-stagger)*2)}
+.js .t-stagger-line--4{transition-delay:calc(var(--stagger-stagger)*3)}
+.js .t-stagger-line--5{transition-delay:calc(var(--stagger-stagger)*4)}
+.t-stagger.is-shown .t-stagger-line{opacity:1;transform:translateY(0);filter:blur(0)}
+@media (prefers-reduced-motion:reduce){.t-stagger-line{transition:none !important}}
+
+/* Recorrido de un dato */
+.flow{list-style:none;display:grid;max-width:400px;width:100%}
+.flow>li{position:relative}
+.node{padding:14px 18px;border-radius:14px;background:var(--raise);box-shadow:0 0 0 1px var(--line),0 12px 24px -16px rgba(0,0,0,.8)}
+.flow>li.node:last-child{box-shadow:0 0 0 1px rgba(242,165,65,.5),0 12px 24px -16px rgba(0,0,0,.8)}
+.node b{display:block;font:700 18px/1.2 var(--font-display);letter-spacing:-.01em}
+.node span{font-size:13.5px;color:var(--mut)}
+.flow .link{height:28px;width:2px;margin-left:30px;border-radius:2px;background:var(--line)}
+.flow .link::after{content:"";position:absolute;left:50%;top:0;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--amber);opacity:0}
+.js .flow>li{opacity:0;transform:translateY(var(--distance-base));transition:opacity var(--duration-slow) var(--ease-smooth-out),transform var(--duration-slow) var(--ease-smooth-out);transition-delay:calc(200ms + var(--i)*var(--duration-stagger))}
+.flow.is-shown>li{opacity:1;transform:none}
+.flow.is-shown .link::after{animation:packet 3.6s var(--ease-linear) infinite;animation-delay:calc(1s + var(--i)*.55s)}
+@keyframes packet{0%{transform:translateY(-4px);opacity:0}12%{opacity:.9}88%{opacity:.9}100%{transform:translateY(24px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.js .flow>li{opacity:1 !important;transform:none !important;transition:none !important}.flow .link::after{animation:none !important;opacity:0 !important}}
+
+/* ── Casos (Accordion expand) ── */
+.cases{border-radius:var(--r-lg);background:var(--bg2);border:1px solid var(--line);overflow:hidden}
+.case+.case{border-top:1px solid var(--line-soft)}
+.t-acc-panel{display:grid;grid-template-rows:1fr}
+.js .t-acc-panel{grid-template-rows:0fr;transition:grid-template-rows var(--acc-collapse) var(--acc-ease)}
+.js .t-acc[data-open="true"] .t-acc-panel{grid-template-rows:1fr;transition:grid-template-rows var(--acc-expand) var(--acc-ease)}
+.t-acc-panel-inner{overflow:hidden}
+.js .t-acc-panel-inner{opacity:0;filter:blur(2px);transition:opacity var(--acc-collapse) var(--acc-ease),filter var(--acc-collapse) var(--acc-ease)}
+.js .t-acc[data-open="true"] .t-acc-panel-inner{opacity:1;filter:blur(0);transition:opacity var(--acc-expand) var(--acc-ease),filter var(--acc-expand) var(--acc-ease)}
+.t-acc-chevron{display:inline-flex;transform:scaleY(1);transform-origin:center;transition:transform var(--acc-chevron) var(--acc-ease)}
+.t-acc[data-open="true"] .t-acc-chevron{transform:scaleY(-1)}
+@media (prefers-reduced-motion:reduce){.t-acc-panel,.t-acc-panel-inner,.t-acc-chevron{transition:none !important}}
+
+.case .t-acc-head{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:20px;align-items:start;text-align:left;border:0;background:none;color:inherit;font:inherit;padding:22px clamp(18px,3vw,28px);cursor:pointer;transition:background-color var(--duration-quick) var(--ease-smooth-out)}
+.case .t-acc-head:focus-visible{outline-offset:-3px}
+@media (hover:hover){.case .t-acc-head:hover{background:rgba(255,255,255,.025)}}
+.case-title{display:block;font:700 clamp(18px,2.1vw,22px)/1.25 var(--font-display);letter-spacing:-.01em;margin-bottom:6px;text-wrap:balance}
+.case-problem{display:block;color:var(--mut);font:400 15px/1.6 var(--font-body);max-width:70ch;text-wrap:pretty}
+.case-chips{display:none}
+@media (min-width:900px){.case-chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:300px;align-self:center;transition:opacity var(--duration-fast) var(--ease-smooth-out)}}
+.case-chips span{padding:4px 10px;border-radius:var(--r-sm);background:rgba(255,255,255,.04);box-shadow:0 0 0 1px var(--line);font:500 12.5px/1.4 var(--font-body);color:var(--mut)}
+.t-acc[data-open="true"] .case-chips{opacity:0}
+.case .t-acc-chevron{width:36px;height:36px;place-items:center;border-radius:50%;background:rgba(255,255,255,.05);color:var(--mut);display:inline-grid}
+.case .t-acc-chevron .ic{width:16px;height:16px}
+.case-body{padding:2px clamp(18px,3vw,28px) 28px}
+.case-label{font-weight:600;font-size:14px;color:var(--ink);margin:0 0 10px}
+.mini-flow{list-style:none;display:grid;gap:22px;margin-bottom:24px}
+@media (min-width:760px){.mini-flow{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}}
+.mini-flow li{position:relative;padding:10px 12px;border-radius:10px;background:rgba(78,161,255,.07);box-shadow:0 0 0 1px rgba(127,211,255,.2);font-size:13.5px;line-height:1.4;color:#d6eaff}
+.mini-flow li:not(:last-child)::after{content:"";position:absolute;width:7px;height:7px;border-top:2px solid var(--faint);border-right:2px solid var(--faint);left:50%;bottom:-14px;transform:translateX(-50%) rotate(135deg)}
+@media (min-width:760px){.mini-flow li:not(:last-child)::after{left:auto;right:-14px;top:50%;bottom:auto;transform:translateY(-50%) rotate(45deg)}}
+/* Caso abierto en escritorio: viñetas a la izquierda, recorrido en vertical a la derecha */
+@media (min-width:900px){
+  .case-body{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,.55fr);column-gap:56px;align-items:start}
+  .case-body>*{grid-column:1}
+  .case-body>.mini-flow{grid-column:2;grid-row:1 / span 3;grid-template-columns:1fr;gap:22px;margin:0}
+  .mini-flow li:not(:last-child)::after{left:50%;right:auto;top:auto;bottom:-14px;transform:translateX(-50%) rotate(135deg)}
+}
+.case-body ul{display:grid;gap:8px;margin:0 0 22px;padding-left:20px;color:var(--ink-2);max-width:72ch}
+.case-body li::marker{color:var(--amber)}
+.tech{display:flex;flex-wrap:wrap;gap:6px}
+.tech span{padding:4px 10px;border-radius:var(--r-sm);background:rgba(255,255,255,.04);box-shadow:0 0 0 1px var(--line);font-size:12.5px;font-weight:500;color:var(--mut)}
+
+.extra{display:grid;gap:36px;margin-top:clamp(32px,4.5vw,52px)}
+@media (min-width:980px){.extra{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:56px;align-items:start}}
+.tools-h{font-size:20px;font-weight:700;margin:0 0 12px}
+.tools{list-style:none;display:grid;column-gap:48px}
+@media (min-width:760px) and (max-width:979px){.tools{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tools li{padding:16px 0;border-top:1px solid var(--line-soft)}
+.tools strong{display:block;margin-bottom:4px;font:600 16px/1.3 var(--font-display)}
+.tools p{font-size:14.5px;color:var(--mut)}
+.note{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding:16px 18px;border-radius:14px;background:rgba(242,165,65,.07);box-shadow:0 0 0 1px rgba(242,165,65,.22);color:var(--ink-2);font-size:14.5px}
+.note .ic{color:var(--amber);margin-top:3px}
+
+/* ── Stack ── */
+.stack-row{display:grid;gap:12px;padding:20px 0;border-top:1px solid var(--line-soft)}
+.stack-row:last-child{border-bottom:1px solid var(--line-soft)}
+@media (min-width:720px){.stack-row{grid-template-columns:210px minmax(0,1fr);gap:28px;align-items:baseline}}
+.stack-row dt{font:600 16px/1.3 var(--font-display)}
+.stack-row dd{display:flex;flex-wrap:wrap;gap:8px}
+/* Stack en 2 × 2 en escritorio: aprovecha todo el ancho */
+@media (min-width:900px){
+  .stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px}
+  .stack-row{grid-template-columns:1fr;gap:12px;align-content:start}
+  .stack-row:last-child{border-bottom:0}
+}
+.chip{padding:6px 14px;border-radius:999px;background:rgba(78,161,255,.08);box-shadow:0 0 0 1px rgba(127,211,255,.24);font-size:14px;font-weight:500;color:#d6eaff}
+.chip.a{background:rgba(242,165,65,.1);box-shadow:0 0 0 1px rgba(242,165,65,.4);color:#ffd9a0}
+
+/* ── Sobre mí ── */
+.about{display:grid;gap:clamp(36px,5vw,56px)}
+@media (min-width:860px){.about{grid-template-columns:1.2fr 1fr}}
+.about p{color:var(--ink-2);margin-bottom:16px;max-width:60ch}
+.tl-h{font-size:20px;font-weight:700;margin-bottom:22px}
+.tl{list-style:none;border-left:2px solid var(--line);padding-left:22px}
+.tl li{position:relative;margin-bottom:20px}
+.tl li::before{content:"";position:absolute;left:-29px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--line)}
+.tl li.now::before{border-color:var(--amber);background:var(--amber)}
+.tl b{display:block;font-size:15.5px;font-weight:600}
+.tl span{font-size:13.5px;color:var(--mut)}
+
+/* ── Proyecto público ── */
+.pub{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:clamp(22px,3vw,30px);border-radius:var(--r-lg);background:linear-gradient(120deg,#1a2f4f,#13223a);box-shadow:0 0 0 1px #2f6db0,0 16px 32px -20px rgba(0,0,0,.8)}
+.pub h4{font:700 clamp(19px,2.2vw,22px)/1.25 var(--font-display);letter-spacing:-.01em;text-wrap:balance}
+.pub p{color:var(--ink-2);max-width:56ch}
+
+/* ── Contacto ── */
+.contact h2{max-width:20ch}
+.contact .sub{margin-top:14px}
+.contact-grid{display:grid;gap:28px}
+@media (min-width:900px){.contact-grid{grid-template-columns:minmax(0,1.3fr) auto;gap:56px;align-items:end}}
+.contact .cta{margin-top:0}
+footer{padding:28px 0 44px;border-top:1px solid var(--line-soft);color:var(--faint);font-size:13.5px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:4px 24px;justify-content:space-between;align-items:center}
+footer a{display:inline-block;padding:9px 0;text-underline-offset:3px}
+@media (hover:hover){footer a:hover{color:var(--ink)}}
 </style>
 </head>
-<body>
-<nav><div class="wrap"><div class="logo">Gerthmay Clair<span>.</span></div><ul><li><a href="#sobre-mi">Sobre mí</a></li><li><a href="#stack">Stack</a></li><li><a href="#casos">Casos</a></li><li><a href="#contacto">Contacto</a></li></ul></div></nav>
+<body id="top">
+<div class="bg-fixed" aria-hidden="true"></div>
+<a class="skip" href="#main" data-i18n="skip">Saltar al contenido</a>
 
-<header><div class="wrap" style="position:relative">
-  <div class="eyebrow">Data Engineer · Panamá</div>
-  <h1>Convierto procesos manuales en <em>pipelines</em> que corren solos.</h1>
-  <p class="lead">Ingeniería de datos y automatización en banca. Llevo datos desde Excel, CSV y PDF escaneados hasta un data lake en Impala, con contratos, pruebas y trazabilidad, y construyo las herramientas que usan los equipos de operaciones cada día.</p>
-  <div class="cta">
-    <a class="btn p" href="#casos">Ver casos →</a>
-    <a class="btn s" href="https://www.linkedin.com/in/gerthmay-ashtbell-clair-m-b7086929a" target="_blank" rel="noopener">LinkedIn</a>
-    <a class="btn s" href="https://github.com/gerthmayac-create" target="_blank" rel="noopener">GitHub</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5" vector-effect="non-scaling-stroke"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+  </defs>
+</svg>
+
+<nav class="top" aria-label="Principal" data-i18n-attr="aria-label:nav.label">
+  <div class="wrap bar">
+    <a class="brand" href="#top"><span>Gerthmay Clair</span><small>Data Engineer</small></a>
+    <ul class="links">
+      <li><a href="#casos"><span class="t-text-soft" data-i18n="n.cases">Casos</span></a></li>
+      <li><a href="#stack"><span class="t-text-soft" data-i18n="n.stack">Stack</span></a></li>
+      <li><a href="#sobre-mi"><span class="t-text-soft" data-i18n="n.about">Sobre mí</span></a></li>
+      <li><a href="#contacto"><span class="t-text-soft" data-i18n="n.contact">Contacto</span></a></li>
+    </ul>
+    <div class="bar-end">
+      <div class="t-tabs" id="lang" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang.label">
+        <span class="t-tabs-pill" aria-hidden="true"></span>
+        <button class="t-tab" type="button" data-lang="es" lang="es" aria-label="Español" aria-pressed="true">ES</button>
+        <button class="t-tab" type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn p sm cta-nav" href="https://www.linkedin.com/in/gerthmay-ashtbell-clair-m-b7086929a" target="_blank" rel="noopener">LinkedIn</a>
+      <div class="navmenu t-acc" data-open="false">
+        <button class="menu-btn t-acc-head" type="button" aria-expanded="false" aria-controls="menu-panel">
+          <span class="t-text-soft" data-i18n="n.menu">Menú</span>
+          <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+        </button>
+        <div class="t-acc-panel" id="menu-panel">
+          <div class="t-acc-panel-inner">
+            <ul class="menu-list">
+              <li><a href="#casos"><span class="t-text-soft" data-i18n="n.cases">Casos</span></a></li>
+              <li><a href="#stack"><span class="t-text-soft" data-i18n="n.stack">Stack</span></a></li>
+              <li><a href="#sobre-mi"><span class="t-text-soft" data-i18n="n.about">Sobre mí</span></a></li>
+              <li><a href="#contacto"><span class="t-text-soft" data-i18n="n.contact">Contacto</span></a></li>
+              <li><a class="btn p" href="https://www.linkedin.com/in/gerthmay-ashtbell-clair-m-b7086929a" target="_blank" rel="noopener"><span data-i18n="h.cta">Escríbeme por LinkedIn</span><svg class="ic"><use href="#i-arrow"/></svg></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="stats">
-    <div class="stat"><b>+100k</b><span>líneas de Python en producción</span></div>
-    <div class="stat"><b>~130</b><span>archivos de pruebas automatizadas</span></div>
-    <div class="stat"><b>29</b><span>repositorios de datos y automatización</span></div>
-    <div class="stat"><b>5 años</b><span>en RRHH, compensación y nómina</span></div>
+</nav>
+
+<main id="main">
+<div class="spine" aria-hidden="true"></div>
+
+<header class="hero"><div class="bg-lake" aria-hidden="true"></div><div class="wrap hero-grid">
+  <div class="t-stagger" id="hero-copy">
+    <div class="t-stagger-line t-stagger-line--1"><h1 data-i18n="h.title">Convierto procesos manuales en <em>pipelines</em> que corren solos.</h1></div>
+    <div class="t-stagger-line t-stagger-line--2"><p class="lead" data-i18n="h.lead">Ingeniería de datos y automatización en banca. Llevo datos desde Excel, CSV y PDF escaneados hasta un data lake en Impala, con contratos, pruebas y trazabilidad, y construyo las herramientas que usan los equipos de operaciones cada día.</p></div>
+    <div class="t-stagger-line t-stagger-line--3"><p class="who" data-i18n="h.who">Psicólogo de formación: antes de mover un dato, pregunto quién lo va a usar y para qué.</p></div>
+    <div class="t-stagger-line t-stagger-line--4"><div class="cta">
+      <a class="btn p" href="https://www.linkedin.com/in/gerthmay-ashtbell-clair-m-b7086929a" target="_blank" rel="noopener"><span data-i18n="h.cta">Escríbeme por LinkedIn</span><svg class="ic"><use href="#i-arrow"/></svg></a>
+      <a class="btn s" href="#casos"><span data-i18n="h.cases">Ver casos</span><svg class="ic ic-down"><use href="#i-down"/></svg></a>
+      <a class="btn s" href="https://github.com/gerthmayac-create" target="_blank" rel="noopener">GitHub</a>
+    </div></div>
+    <div class="t-stagger-line t-stagger-line--5"><p class="proof" data-i18n="h.proof"><span class="num">+100 000</span> líneas de Python en producción, <span class="num">~130</span> archivos de pruebas automatizadas y <span class="num">29</span> repositorios de datos y automatización (código privado por confidencialidad).</p></div>
   </div>
+
+  <ol class="flow" id="hero-flow" aria-label="Recorrido de un dato en mis pipelines" data-i18n-attr="aria-label:h.flow.label">
+    <li class="node" style="--i:0"><b data-i18n="f.1t">Excel, CSV y PDF</b><span data-i18n="f.1d">incluso escaneados</span></li>
+    <li class="link" style="--i:1" aria-hidden="true"></li>
+    <li class="node" style="--i:2"><b data-i18n="f.2t">Contrato y validaciones</b><span data-i18n="f.2d">con pruebas y trazabilidad</span></li>
+    <li class="link" style="--i:3" aria-hidden="true"></li>
+    <li class="node" style="--i:4"><b data-i18n="f.3t">Parquet</b><span data-i18n="f.3d">formato de salida</span></li>
+    <li class="link" style="--i:5" aria-hidden="true"></li>
+    <li class="node" style="--i:6"><b data-i18n="f.4t">Impala / HDFS</b><span data-i18n="f.4d">data lake</span></li>
+  </ol>
 </div></header>
 
-<section id="sobre-mi"><div class="wrap about">
+<section class="sec" id="casos"><div class="wrap">
+  <div class="sec-head">
+    <h2 data-i18n="s.cases.t">Qué he construido</h2>
+    <p class="sub" data-i18n="s.cases.sub">Proyectos reales en banca. El código es privado por confidencialidad: aquí está el problema, la solución y cómo está hecha.</p>
+  </div>
+
+  <div class="cases">
+
+    <article class="case t-acc" data-open="true">
+      <h3><button class="t-acc-head" type="button" aria-expanded="true" aria-controls="c1">
+        <span><span class="case-title" data-i18n="c1.t">Unificación de un histórico transaccional de cinco años</span><span class="case-problem" data-i18n="c1.p">Transacciones de 2015 a 2019 en CSV y Excel con estructuras distintas por tramo. Unirlas funcionaba, pero daba números incorrectos.</span></span>
+        <span class="case-chips" aria-hidden="true"><span>Python</span><span>Polars</span><span>Parquet</span><span>Impala</span><span>pytest</span></span>
+        <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+      </button></h3>
+      <div class="t-acc-panel" id="c1"><div class="t-acc-panel-inner"><div class="case-body">
+        <ol class="mini-flow" aria-label="Recorrido" data-i18n-attr="aria-label:c.flow">
+          <li data-i18n="c1.f1">CSV y Excel, 2015–2019</li><li data-i18n="c1.f2">Contrato de 64 columnas</li><li data-i18n="c1.f3">Streaming y manifiesto md5</li><li data-i18n="c1.f4">Parquet en Impala</li>
+        </ol>
+        <p class="case-label" data-i18n="c.how">Cómo está hecho</p>
+        <ul>
+          <li data-i18n="c1.b1">Contrato único de 64 columnas como fuente de verdad: nombres, tipos y mapeo de cada tramo.</li>
+          <li data-i18n="c1.b2">Lectura en streaming, normalización de fechas y valores, y un manifiesto por archivo con filas y md5.</li>
+          <li data-i18n="c1.b3">Salida en Parquet y carga a Impala para unir con los años recientes.</li>
+          <li data-i18n="c1.b4">Pruebas del contrato, de integración de los cuatro tramos y de la consolidación.</li>
+        </ul>
+        <div class="tech"><span>Python</span><span>Polars</span><span>Parquet</span><span>Impala</span><span>pytest</span></div>
+      </div></div></div>
+    </article>
+
+    <article class="case t-acc" data-open="false">
+      <h3><button class="t-acc-head" type="button" aria-expanded="false" aria-controls="c2">
+        <span><span class="case-title" data-i18n="c2.t">Ingesta automática de reportes Excel al data lake</span><span class="case-problem" data-i18n="c2.p">Reportes que llegaban en Excel con varias hojas y se procesaban a mano.</span></span>
+        <span class="case-chips" aria-hidden="true"><span>Python</span><span>pandas</span><span>pyodbc</span><span>Impala</span><span>Task Scheduler</span></span>
+        <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+      </button></h3>
+      <div class="t-acc-panel" id="c2"><div class="t-acc-panel-inner"><div class="case-body">
+        <ol class="mini-flow" aria-label="Recorrido" data-i18n-attr="aria-label:c.flow">
+          <li data-i18n="c2.f1">Excel con varias hojas</li><li data-i18n="c2.f2">Una tabla por hoja, por fecha</li><li data-i18n="c2.f3">Carga todo-o-nada</li><li data-i18n="c2.f4">Impala</li>
+        </ol>
+        <p class="case-label" data-i18n="c.how">Cómo está hecho</p>
+        <ul>
+          <li data-i18n="c2.b1">Cada hoja va a su tabla, particionada por año, mes y día, con archivo y hoja de origen.</li>
+          <li data-i18n="c2.b2">Si el Excel trae columnas nuevas, la tabla se amplía sola sin romperse.</li>
+          <li data-i18n="c2.b3">Carga todo-o-nada en un solo INSERT y sin duplicados aunque se repita la ejecución.</li>
+          <li data-i18n="c2.b4">Modo de prueba sobre tablas temporales y ejecución programada.</li>
+        </ul>
+        <div class="tech"><span>Python</span><span>pandas</span><span>pyodbc</span><span>Impala</span><span>Task Scheduler</span></div>
+      </div></div></div>
+    </article>
+
+    <article class="case t-acc" data-open="false">
+      <h3><button class="t-acc-head" type="button" aria-expanded="false" aria-controls="c3">
+        <span><span class="case-title" data-i18n="c3.t">Notificaciones automáticas a clientes</span><span class="case-problem" data-i18n="c3.p">Avisos a clientes que se consultaban, armaban y enviaban a mano.</span></span>
+        <span class="case-chips" aria-hidden="true"><span>Python</span><span>Impala</span><span>SQLite</span><span>YAML</span><span>pytest</span></span>
+        <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+      </button></h3>
+      <div class="t-acc-panel" id="c3"><div class="t-acc-panel-inner"><div class="case-body">
+        <ol class="mini-flow" aria-label="Recorrido" data-i18n-attr="aria-label:c.flow">
+          <li data-i18n="c3.f1">Casos en Impala, tres veces al día</li><li data-i18n="c3.f2">Reglas en YAML</li><li data-i18n="c3.f3">Correo al cliente</li><li data-i18n="c3.f4">Evidencia para auditoría</li>
+        </ol>
+        <p class="case-label" data-i18n="c.how">Cómo está hecho</p>
+        <ul>
+          <li data-i18n="c3.b1">Consulta los casos en Impala tres veces al día y envía cada notificación según reglas configurables en YAML.</li>
+          <li data-i18n="c3.b2">Guarda evidencia de cada correo enviado para auditoría.</li>
+          <li data-i18n="c3.b3">Bloquea cualquier envío si no está en el entorno de producción.</li>
+          <li data-i18n="c3.b4">Más de 50 archivos de pruebas unitarias y de integración.</li>
+        </ul>
+        <div class="tech"><span>Python</span><span>Impala</span><span>SQLite</span><span>YAML</span><span>pytest</span></div>
+      </div></div></div>
+    </article>
+
+    <article class="case t-acc" data-open="false">
+      <h3><button class="t-acc-head" type="button" aria-expanded="false" aria-controls="c4">
+        <span><span class="case-title" data-i18n="c4.t">Gestión de cartera para un equipo, sin servidor</span><span class="case-problem" data-i18n="c4.p">Todo un equipo trabajaba sobre un mismo Excel trimestral compartido.</span></span>
+        <span class="case-chips" aria-hidden="true"><span>PyQt6</span><span>SQLite</span><span>openpyxl</span><span>reportlab</span><span>pytest-qt</span></span>
+        <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+      </button></h3>
+      <div class="t-acc-panel" id="c4"><div class="t-acc-panel-inner"><div class="case-body">
+        <ol class="mini-flow" aria-label="Recorrido" data-i18n-attr="aria-label:c.flow">
+          <li data-i18n="c4.f1">Excel trimestral compartido</li><li data-i18n="c4.f2">App con prioridad por persona</li><li data-i18n="c4.f3">Sincronía por carpeta, sin servidor</li><li data-i18n="c4.f4">Entrega en Excel y PDF</li>
+        </ol>
+        <p class="case-label" data-i18n="c.how">Cómo está hecho</p>
+        <ul>
+          <li data-i18n="c4.b1">App de escritorio que le dice a cada persona qué cliente gestionar, por prioridad.</li>
+          <li data-i18n="c4.b2">Sin servidor: cada equipo escribe su diario en una carpeta compartida y lee el de los demás cada pocos segundos.</li>
+          <li data-i18n="c4.b3">Aprobaciones de cambios, auditoría, alertas de gestiones omitidas y dashboard.</li>
+          <li data-i18n="c4.b4">Entrega trimestral en Excel y PDF. Más de 30 archivos de pruebas.</li>
+        </ul>
+        <div class="tech"><span>PyQt6</span><span>SQLite</span><span>openpyxl</span><span>reportlab</span><span>pytest-qt</span></div>
+      </div></div></div>
+    </article>
+
+    <article class="case t-acc" data-open="false">
+      <h3><button class="t-acc-head" type="button" aria-expanded="false" aria-controls="c5">
+        <span><span class="case-title" data-i18n="c5.t">Lectura y renombrado de documentos escaneados</span><span class="case-problem" data-i18n="c5.p">Cientos de PDF escaneados que se abrían, leían y renombraban uno por uno.</span></span>
+        <span class="case-chips" aria-hidden="true"><span>PyQt6</span><span>Tesseract</span><span>PyMuPDF</span><span>GitHub Actions</span></span>
+        <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+      </button></h3>
+      <div class="t-acc-panel" id="c5"><div class="t-acc-panel-inner"><div class="case-body">
+        <ol class="mini-flow" aria-label="Recorrido" data-i18n-attr="aria-label:c.flow">
+          <li data-i18n="c5.f1">PDF escaneado</li><li data-i18n="c5.f2">Texto u OCR por zona</li><li data-i18n="c5.f3">Revisión en tabla</li><li data-i18n="c5.f4">Renombrado, con deshacer</li>
+        </ol>
+        <p class="case-label" data-i18n="c.how">Cómo está hecho</p>
+        <ul>
+          <li data-i18n="c5.b1">Lee el texto del PDF y, si no lo tiene, aplica OCR sobre la zona de la página que elija el usuario.</li>
+          <li data-i18n="c5.b2">Detecta casillas marcadas en formularios para sacar número de expediente y categoría.</li>
+          <li data-i18n="c5.b3">Revisión en tabla editable antes de renombrar y deshacer desde el historial.</li>
+          <li data-i18n="c5.b4">Visor integrado de PDF, imágenes, Excel y Word. CI con GitHub Actions.</li>
+        </ul>
+        <div class="tech"><span>PyQt6</span><span>Tesseract</span><span>PyMuPDF</span><span>GitHub Actions</span></div>
+      </div></div></div>
+    </article>
+
+    <article class="case t-acc" data-open="false">
+      <h3><button class="t-acc-head" type="button" aria-expanded="false" aria-controls="c6">
+        <span><span class="case-title" data-i18n="c6.t">ETL de casos del CRM</span><span class="case-problem" data-i18n="c6.p">Casos, interacciones, órdenes y visitas del CRM dispersos y sin un modelo común.</span></span>
+        <span class="case-chips" aria-hidden="true"><span>Python</span><span>pandas</span><span>SQL</span><span>Impala</span></span>
+        <span class="t-acc-chevron" aria-hidden="true"><svg class="ic"><use href="#i-chev"/></svg></span>
+      </button></h3>
+      <div class="t-acc-panel" id="c6"><div class="t-acc-panel-inner"><div class="case-body">
+        <ol class="mini-flow" aria-label="Recorrido" data-i18n-attr="aria-label:c.flow">
+          <li data-i18n="c6.f1">Lectura</li><li data-i18n="c6.f2">Limpieza</li><li data-i18n="c6.f3">Enriquecimiento</li><li data-i18n="c6.f4">Carga a Impala</li>
+        </ol>
+        <p class="case-label" data-i18n="c.how">Cómo está hecho</p>
+        <ul>
+          <li data-i18n="c6.b1">Un proceso por entidad sobre un núcleo compartido: lectura, limpieza, enriquecimiento y carga.</li>
+          <li data-i18n="c6.b2">Tipos y tablas centralizados, con migraciones SQL versionadas.</li>
+          <li data-i18n="c6.b3">Registro de cada ejecución para encontrar fallas rápido.</li>
+        </ul>
+        <div class="tech"><span>Python</span><span>pandas</span><span>SQL</span><span>Impala</span></div>
+      </div></div></div>
+    </article>
+
+  </div>
+
+  <div class="extra">
   <div>
-    <div class="eyebrow">Sobre mí</div>
-    <h2>Del Excel de nómina al data lake</h2>
-    <p>Empecé cuadrando planillas en Excel. La tercera vez que una tarea me tomaba el mismo tiempo que la primera, la automatizaba: primero con fórmulas, luego con macros y después con Python, para no depender de una macro que nadie entendía.</p>
-    <p>Hoy trabajo en ingeniería de datos en un banco: migro procesos de Excel a Python, cargo históricos en tablas particionadas sobre Impala/HDFS y construyo herramientas de escritorio con OCR, validaciones y auditoría.</p>
-    <p>Soy psicólogo de formación (Universidad de Panamá). Eso me dejó una costumbre útil: antes de mover un dato, pregunto quién lo va a usar y para qué.</p>
+  <h3 class="tools-h" data-i18n="tools.h">Otras herramientas</h3>
+  <ul class="tools">
+    <li><strong data-i18n="t1.t">Correos masivos por flujo</strong><p data-i18n="t1.p">La plantilla de Outlook se elige sola según departamento y flujo. Configuración en JSON y trazabilidad de cada envío.</p></li>
+    <li><strong data-i18n="t2.t">Consultor de archivos gigantes</strong><p data-i18n="t2.p">App para buscar por cuenta en archivos de texto de cientos de MB sin abrir Excel. Se entrega como .exe.</p></li>
+    <li><strong data-i18n="t3.t">Generador de formularios PDF</strong><p data-i18n="t3.p">Valida un Excel trimestral y genera un PDF por fila más un consolidado. Migrado de Tkinter y Word a PyQt6.</p></li>
+    <li><strong data-i18n="t4.t">Simulador de mora y amortización</strong><p data-i18n="t4.p">Recalcula pagos, mora y alivios para atender reclamos de clientes, con consultas SQL.</p></li>
+    <li><strong data-i18n="t5.t">Carga masiva en plataforma BPM</strong><p data-i18n="t5.p">Automatización de navegador con Playwright para registrar casos en lote.</p></li>
+    <li><strong data-i18n="t6.t">Tableros en Power BI</strong><p data-i18n="t6.p">Seguimiento operativo de cuentas y casos para áreas de negocio.</p></li>
+  </ul>
   </div>
   <div>
-    <div class="eyebrow" style="margin-bottom:20px">Trayectoria</div>
-    <div class="tl">
-      <div class="now"><b>Data Specialist · Banca</b><span>2026 – hoy · ingeniería de datos y automatización</span></div>
-      <div><b>Compensación y contraloría de RRHH</b><span>Analista regional</span></div>
-      <div><b>Business Analytics</b><span>Datos financieros y SAP</span></div>
-      <div><b>Datos de compensación y RRHH</b><span>Analista</span></div>
-      <div><b>Business Intelligence y mejora de procesos</b><span>Analista</span></div>
-      <div><b>Análisis de negocio y BI</b><span>Banca</span></div>
-      <div><b>Licenciatura en Psicología</b><span>Universidad de Panamá</span></div>
+    <h3 class="tools-h" data-i18n="p.t">Datos abiertos de Panamá</h3>
+    <div class="pub">
+      <h4 data-i18n="p.name">Análisis del mercado laboral en Panamá</h4>
+      <p data-i18n="p.desc">Brecha salarial por sexo, distribución de salarios, informalidad y población no económicamente activa, con datos oficiales.</p>
+      <div class="tech"><span>Python</span><span>pandas</span><span>Matplotlib</span></div>
+      <a class="btn p" href="https://github.com/gerthmayac-create/analisis-mercado-laboral-panama" target="_blank" rel="noopener"><span data-i18n="p.link">Ver repositorio</span><svg class="ic"><use href="#i-arrow"/></svg></a>
+    </div>
+    <p class="note"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg><span data-i18n="note">Por confidencialidad no publico código, datos ni nombres de sistemas internos. Con gusto explico cualquiera de estos casos en una entrevista.</span></p>
+  </div>
+  </div>
+
+</div></section>
+
+<section class="sec" id="stack"><div class="wrap">
+  <div class="sec-head">
+    <h2 data-i18n="s.stack.t">Herramientas de cada día</h2>
+    <p class="sub" data-i18n="s.stack.sub">Lo que uso en los proyectos de arriba, no una lista de cursos.</p>
+  </div>
+  <dl class="stack">
+    <div class="stack-row"><dt data-i18n="st.1">Datos</dt><dd><span class="chip a">Python</span><span class="chip a">SQL</span><span class="chip">pandas</span><span class="chip">Polars</span><span class="chip">Parquet</span><span class="chip">pyodbc</span></dd></div>
+    <div class="stack-row"><dt data-i18n="st.2">Plataforma y calidad</dt><dd><span class="chip a">Apache Airflow</span><span class="chip a">Impala / HDFS</span><span class="chip">pytest</span><span class="chip">GitHub Actions</span><span class="chip">Git</span></dd></div>
+    <div class="stack-row"><dt data-i18n="st.3">Apps y automatización</dt><dd><span class="chip">PyQt6</span><span class="chip">PySide6</span><span class="chip">SQLite</span><span class="chip">Tesseract OCR</span><span class="chip">PyMuPDF</span><span class="chip">reportlab</span><span class="chip">Playwright</span></dd></div>
+    <div class="stack-row"><dt data-i18n="st.4">Negocio y análisis</dt><dd><span class="chip">Power BI</span><span class="chip">Power Automate</span><span class="chip">SAP HCM / MM</span><span class="chip" data-i18n="chip.stats">Estadística inferencial</span></dd></div>
+  </dl>
+</div></section>
+
+<section class="sec" id="sobre-mi"><div class="wrap about">
+  <div>
+    <h2 data-i18n="a.t">Del Excel de nómina al data lake</h2>
+    <p data-i18n="a.p1">Empecé cuadrando planillas en Excel. La tercera vez que una tarea me tomaba el mismo tiempo que la primera, la automatizaba: primero con fórmulas, luego con macros y después con Python, para no depender de una macro que nadie entendía.</p>
+    <p data-i18n="a.p2">Hoy trabajo en ingeniería de datos en un banco: migro procesos de Excel a Python, cargo históricos en tablas particionadas sobre Impala/HDFS y construyo herramientas de escritorio con OCR, validaciones y auditoría.</p>
+    <p data-i18n="a.p3">Soy psicólogo de formación (Universidad de Panamá) y pasé cerca de cinco años en RRHH, compensación y nómina. Esa mezcla me dejó una pregunta fija antes de mover cualquier dato: quién lo va a usar y para qué.</p>
+  </div>
+  <div>
+    <h3 class="tl-h" data-i18n="a.path">Trayectoria</h3>
+    <ol class="tl">
+      <li class="now"><b data-i18n="tl.1t">Data Specialist · Banca</b><span data-i18n="tl.1d">2026 – hoy · ingeniería de datos y automatización</span></li>
+      <li><b data-i18n="tl.2t">Compensación y contraloría de RRHH</b><span data-i18n="tl.2d">Analista regional</span></li>
+      <li><b data-i18n="tl.3t">Business Analytics</b><span data-i18n="tl.3d">Datos financieros y SAP</span></li>
+      <li><b data-i18n="tl.4t">Datos de compensación y RRHH</b><span data-i18n="tl.4d">Analista</span></li>
+      <li><b data-i18n="tl.5t">Business Intelligence y mejora de procesos</b><span data-i18n="tl.5d">Analista</span></li>
+      <li><b data-i18n="tl.6t">Análisis de negocio y BI</b><span data-i18n="tl.6d">Banca</span></li>
+      <li><b data-i18n="tl.7t">Licenciatura en Psicología</b><span data-i18n="tl.7d">Universidad de Panamá</span></li>
+    </ol>
+  </div>
+</div></section>
+
+<section class="sec contact" id="contacto"><div class="bg-lake" aria-hidden="true"></div><div class="wrap">
+  <div class="contact-grid">
+    <div>
+      <h2 data-i18n="ct.t">¿Buscas a alguien para tu equipo de datos?</h2>
+      <p class="sub" data-i18n="ct.p">Estoy abierto a roles de Data Engineering y Analytics Engineering, sobre todo donde el dato tenga que servirle a personas: banca, RRHH, operaciones.</p>
+    </div>
+    <div class="cta">
+      <a class="btn p" href="https://www.linkedin.com/in/gerthmay-ashtbell-clair-m-b7086929a" target="_blank" rel="noopener"><span data-i18n="h.cta">Escríbeme por LinkedIn</span><svg class="ic"><use href="#i-arrow"/></svg></a>
+      <a class="btn s" href="https://github.com/gerthmayac-create" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </div></section>
 
-<section id="stack"><div class="wrap">
-  <div class="eyebrow">Stack</div>
-  <h2>Herramientas de cada día</h2>
-  <p class="sub">Lo que uso en los proyectos de abajo, no una lista de cursos.</p>
-  <div class="stack">
-    <span class="chip a">Python</span><span class="chip a">SQL</span><span class="chip a">Apache Airflow</span><span class="chip a">Impala / HDFS</span>
-    <span class="chip">Parquet</span><span class="chip">pandas</span><span class="chip">Polars</span><span class="chip">pyodbc</span><span class="chip">Power BI</span><span class="chip">Power Automate</span>
-    <span class="chip">PyQt6</span><span class="chip">PySide6</span><span class="chip">SQLite</span><span class="chip">Tesseract OCR</span><span class="chip">PyMuPDF</span><span class="chip">reportlab</span>
-    <span class="chip">Playwright</span><span class="chip">pytest</span><span class="chip">GitHub Actions</span><span class="chip">Git</span><span class="chip">SAP HCM / MM</span><span class="chip">Estadística inferencial</span>
-  </div>
-</div></section>
+</main>
 
-<section id="casos"><div class="wrap">
-  <div class="eyebrow">Casos</div>
-  <h2>Qué he construido</h2>
-  <p class="sub">Proyectos reales en banca. El código es privado por confidencialidad: aquí está el problema, la solución y cómo está hecha.</p>
-  <div class="grid">
-
-    <article class="case">
-      <div class="k"><span class="tag">Data Engineering</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7fd3ff" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span></div>
-      <h3>Unificación de un histórico transaccional de cinco años</h3>
-      <p class="row"><b>Problema:</b> transacciones de 2015 a 2019 en CSV y Excel con estructuras distintas por tramo. Unirlas funcionaba, pero daba números incorrectos.</p>
-      <ul>
-        <li>Contrato único de 64 columnas como fuente de verdad: nombres, tipos y mapeo de cada tramo.</li>
-        <li>Lectura en streaming, normalización de fechas y valores, y un manifiesto por archivo con filas y md5.</li>
-        <li>Salida en Parquet y carga a Impala para unir con los años recientes.</li>
-        <li>Pruebas del contrato, de integración de los cuatro tramos y de la consolidación.</li>
-      </ul>
-      <div class="tech"><span>Python</span><span>Polars</span><span>Parquet</span><span>Impala</span><span>pytest</span></div>
-    </article>
-
-    <article class="case">
-      <div class="k"><span class="tag">Pipeline</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7fd3ff" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span></div>
-      <h3>Ingesta automática de reportes Excel al data lake</h3>
-      <p class="row"><b>Problema:</b> reportes que llegaban en Excel con varias hojas y se procesaban a mano.</p>
-      <ul>
-        <li>Cada hoja va a su tabla, particionada por año, mes y día, con archivo y hoja de origen.</li>
-        <li>Si el Excel trae columnas nuevas, la tabla se amplía sola sin romperse.</li>
-        <li>Carga todo-o-nada en un solo INSERT y sin duplicados aunque se repita la ejecución.</li>
-        <li>Modo de prueba sobre tablas temporales y ejecución programada.</li>
-      </ul>
-      <div class="tech"><span>Python</span><span>pandas</span><span>pyodbc</span><span>Impala</span><span>Task Scheduler</span></div>
-    </article>
-
-    <article class="case">
-      <div class="k"><span class="tag">Automatización</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7fd3ff" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span></div>
-      <h3>Notificaciones automáticas a clientes</h3>
-      <p class="row"><b>Problema:</b> avisos a clientes que se consultaban, armaban y enviaban a mano.</p>
-      <ul>
-        <li>Consulta los casos en Impala tres veces al día y envía cada notificación según reglas configurables en YAML.</li>
-        <li>Guarda evidencia de cada correo enviado para auditoría.</li>
-        <li>Bloquea cualquier envío si no está en el entorno de producción.</li>
-        <li>Más de 50 archivos de pruebas unitarias y de integración.</li>
-      </ul>
-      <div class="tech"><span>Python</span><span>Impala</span><span>SQLite</span><span>YAML</span><span>pytest</span></div>
-    </article>
-
-    <article class="case">
-      <div class="k"><span class="tag">App multiusuario</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7fd3ff" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 20c0-2 1.5-4 4-4s4 2 4 4"/></svg></span></div>
-      <h3>Gestión de cartera para un equipo, sin servidor</h3>
-      <p class="row"><b>Problema:</b> todo un equipo trabajaba sobre un mismo Excel trimestral compartido.</p>
-      <ul>
-        <li>App de escritorio que le dice a cada persona qué cliente gestionar, por prioridad.</li>
-        <li>Sin servidor: cada equipo escribe su diario en una carpeta compartida y lee el de los demás cada pocos segundos.</li>
-        <li>Aprobaciones de cambios, auditoría, alertas de gestiones omitidas y dashboard.</li>
-        <li>Entrega trimestral en Excel y PDF. Más de 30 archivos de pruebas.</li>
-      </ul>
-      <div class="tech"><span>PyQt6</span><span>SQLite</span><span>openpyxl</span><span>reportlab</span><span>pytest-qt</span></div>
-    </article>
-
-    <article class="case">
-      <div class="k"><span class="tag">OCR</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7fd3ff" stroke-width="2"><path d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6M8 12h8"/></svg></span></div>
-      <h3>Lectura y renombrado de documentos escaneados</h3>
-      <p class="row"><b>Problema:</b> cientos de PDF escaneados que se abrían, leían y renombraban uno por uno.</p>
-      <ul>
-        <li>Lee el texto del PDF y, si no lo tiene, aplica OCR sobre la zona de la página que elija el usuario.</li>
-        <li>Detecta casillas marcadas en formularios para sacar número de expediente y categoría.</li>
-        <li>Revisión en tabla editable antes de renombrar y deshacer desde el historial.</li>
-        <li>Visor integrado de PDF, imágenes, Excel y Word. CI con GitHub Actions.</li>
-      </ul>
-      <div class="tech"><span>PyQt6</span><span>Tesseract</span><span>PyMuPDF</span><span>GitHub Actions</span></div>
-    </article>
-
-    <article class="case">
-      <div class="k"><span class="tag">ETL</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7fd3ff" stroke-width="2"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 4l3 3-3 3"/></svg></span></div>
-      <h3>ETL de casos del CRM</h3>
-      <p class="row"><b>Problema:</b> casos, interacciones, órdenes y visitas del CRM dispersos y sin un modelo común.</p>
-      <ul>
-        <li>Un proceso por entidad sobre un núcleo compartido: lectura, limpieza, enriquecimiento y carga.</li>
-        <li>Tipos y tablas centralizados, con migraciones SQL versionadas.</li>
-        <li>Registro de cada ejecución para encontrar fallas rápido.</li>
-      </ul>
-      <div class="tech"><span>Python</span><span>pandas</span><span>SQL</span><span>Impala</span></div>
-    </article>
-
-  </div>
-
-  <div class="more">
-    <div class="mini"><b>Correos masivos por flujo</b><p>La plantilla de Outlook se elige sola según departamento y flujo. Configuración en JSON y trazabilidad de cada envío.</p></div>
-    <div class="mini"><b>Consultor de archivos gigantes</b><p>App para buscar por cuenta en archivos de texto de cientos de MB sin abrir Excel. Se entrega como .exe.</p></div>
-    <div class="mini"><b>Generador de formularios PDF</b><p>Valida un Excel trimestral y genera un PDF por fila más un consolidado. Migrado de Tkinter y Word a PyQt6.</p></div>
-    <div class="mini"><b>Simulador de mora y amortización</b><p>Recalcula pagos, mora y alivios para atender reclamos de clientes, con consultas SQL.</p></div>
-    <div class="mini"><b>Carga masiva en plataforma BPM</b><p>Automatización de navegador con Playwright para registrar casos en lote.</p></div>
-    <div class="mini"><b>Tableros en Power BI</b><p>Seguimiento operativo de cuentas y casos para áreas de negocio.</p></div>
-  </div>
-  <p class="note">Por confidencialidad no publico código, datos ni nombres de sistemas internos. Con gusto explico cualquiera de estos casos en una entrevista.</p>
-</div></section>
-
-<section><div class="wrap">
-  <div class="eyebrow">Proyecto público</div>
-  <h2>Datos abiertos de Panamá</h2>
-  <div class="pub" style="margin-top:26px">
-    <div style="flex:1">
-      <h3 style="font-size:22px">Análisis del mercado laboral en Panamá</h3>
-      <p>Brecha salarial por sexo, distribución de salarios, informalidad y población no económicamente activa, con datos oficiales.</p>
-      <div class="tech" style="display:flex;gap:6px;margin-top:14px"><span class="chip" style="font-size:12px;padding:4px 10px">Python</span><span class="chip" style="font-size:12px;padding:4px 10px">pandas</span><span class="chip" style="font-size:12px;padding:4px 10px">Matplotlib</span></div>
-    </div>
-    <a class="btn p" href="https://github.com/gerthmayac-create/analisis-mercado-laboral-panama" target="_blank" rel="noopener">Ver repositorio →</a>
-  </div>
-</div></section>
-
-<footer id="contacto"><div class="wrap">
-  <div class="eyebrow">Contacto</div>
-  <h2>¿Buscas a alguien para tu equipo de datos?</h2>
-  <p class="sub">Estoy abierto a roles de Data Engineering y Analytics Engineering, sobre todo donde el dato tenga que servirle a personas: banca, RRHH, operaciones.</p>
-  <div class="cta">
-    <a class="btn p" href="https://www.linkedin.com/in/gerthmay-ashtbell-clair-m-b7086929a" target="_blank" rel="noopener">Escríbeme por LinkedIn</a>
-    <a class="btn s" href="https://github.com/gerthmayac-create" target="_blank" rel="noopener">GitHub</a>
-  </div>
-  <small>© 2026 Gerthmay Clair · Panamá</small>
+<footer><div class="wrap">
+  <span data-i18n="f.copy">© 2026 Gerthmay Clair · Panamá</span>
+  <a href="#top" data-i18n="f.top">Volver arriba</a>
 </div></footer>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ── Textos en inglés. El español es el texto que ya está escrito en el HTML. ── */
+  var EN = {
+    "skip": "Skip to content",
+    "nav.label": "Main",
+    "lang.label": "Language",
+    "meta.desc": "Portfolio of Gerthmay Clair, a Data Engineer in Panama: pipelines, ETL, automation and data tools for banking and HR.",
+    "n.cases": "Case studies", "n.stack": "Stack", "n.about": "About", "n.contact": "Contact", "n.menu": "Menu",
+    "h.title": "I turn manual processes into <em>pipelines</em> that run on their own.",
+    "h.lead": "Data engineering and automation in banking. I take data from Excel, CSV and scanned PDFs all the way to a data lake on Impala, with contracts, tests and traceability, and I build the tools that operations teams use every day.",
+    "h.who": "A psychologist by training: before I move any data, I ask who will use it and what for.",
+    "h.cta": "Message me on LinkedIn",
+    "h.cases": "See case studies",
+    "h.proof": "<span class=\"num\">100,000+</span> lines of Python in production, <span class=\"num\">~130</span> automated test files and <span class=\"num\">29</span> data and automation repositories (code kept private for confidentiality).",
+    "h.flow.label": "How data travels through my pipelines",
+    "f.1t": "Excel, CSV and PDF", "f.1d": "even scanned ones",
+    "f.2t": "Contract and validations", "f.2d": "with tests and traceability",
+    "f.3t": "Parquet", "f.3d": "output format",
+    "f.4t": "Impala / HDFS", "f.4d": "data lake",
+    "s.cases.t": "What I've built",
+    "s.cases.sub": "Real projects in banking. The code is private for confidentiality, so here is the problem, the solution and how it is built.",
+    "c.how": "How it's built",
+    "c.flow": "Flow",
+    "c1.t": "Unifying five years of transaction history",
+    "c1.p": "Transactions from 2015 to 2019 in CSV and Excel, with a different structure in each period. Joining them worked, but the numbers came out wrong.",
+    "c1.f1": "CSV and Excel, 2015–2019", "c1.f2": "64-column contract", "c1.f3": "Streaming and md5 manifest", "c1.f4": "Parquet in Impala",
+    "c1.b1": "A single 64-column contract as the source of truth: names, types and the mapping for each period.",
+    "c1.b2": "Streaming reads, date and value normalization, and a per-file manifest with row counts and md5.",
+    "c1.b3": "Output in Parquet and loaded to Impala to join with the recent years.",
+    "c1.b4": "Tests for the contract, for integrating the four periods and for the consolidation.",
+    "c2.t": "Automatic ingestion of Excel reports into the data lake",
+    "c2.p": "Reports arrived as multi-sheet Excel files and were processed by hand.",
+    "c2.f1": "Multi-sheet Excel", "c2.f2": "One table per sheet, by date", "c2.f3": "All-or-nothing load", "c2.f4": "Impala",
+    "c2.b1": "Each sheet goes to its own table, partitioned by year, month and day, with its source file and sheet.",
+    "c2.b2": "If the Excel brings new columns, the table widens on its own without breaking.",
+    "c2.b3": "All-or-nothing load in a single INSERT, with no duplicates even if a run is repeated.",
+    "c2.b4": "Test mode on temporary tables and scheduled runs.",
+    "c3.t": "Automatic customer notifications",
+    "c3.p": "Customer notices that were looked up, put together and sent by hand.",
+    "c3.f1": "Cases in Impala, three times a day", "c3.f2": "Rules in YAML", "c3.f3": "Email to the customer", "c3.f4": "Evidence for audit",
+    "c3.b1": "Queries the cases in Impala three times a day and sends each notification according to rules configurable in YAML.",
+    "c3.b2": "Keeps evidence of every email sent, for audit.",
+    "c3.b3": "Blocks any sending that is not in the production environment.",
+    "c3.b4": "More than 50 unit and integration test files.",
+    "c4.t": "Portfolio management for a team, with no server",
+    "c4.p": "A whole team worked on the same shared quarterly Excel file.",
+    "c4.f1": "Shared quarterly Excel", "c4.f2": "App with priority per person", "c4.f3": "Folder sync, no server", "c4.f4": "Excel and PDF delivery",
+    "c4.b1": "Desktop app that tells each person which customer to handle, by priority.",
+    "c4.b2": "No server: each team writes its journal in a shared folder and reads the others' every few seconds.",
+    "c4.b3": "Change approvals, audit trail, alerts for skipped follow-ups and a dashboard.",
+    "c4.b4": "Quarterly delivery in Excel and PDF. More than 30 test files.",
+    "c5.t": "Reading and renaming scanned documents",
+    "c5.p": "Hundreds of scanned PDFs that were opened, read and renamed one by one.",
+    "c5.f1": "Scanned PDF", "c5.f2": "Text or OCR by zone", "c5.f3": "Review in a table", "c5.f4": "Rename, with undo",
+    "c5.b1": "Reads the PDF text and, if there is none, applies OCR to the page area the user picks.",
+    "c5.b2": "Detects checked boxes in forms to get the file number and category.",
+    "c5.b3": "Review in an editable table before renaming, and undo from the history.",
+    "c5.b4": "Built-in viewer for PDF, images, Excel and Word. CI with GitHub Actions.",
+    "c6.t": "CRM case ETL",
+    "c6.p": "CRM cases, interactions, orders and visits were scattered, with no common model.",
+    "c6.f1": "Read", "c6.f2": "Clean", "c6.f3": "Enrich", "c6.f4": "Load to Impala",
+    "c6.b1": "One process per entity on a shared core: read, clean, enrich and load.",
+    "c6.b2": "Centralized types and tables, with versioned SQL migrations.",
+    "c6.b3": "A record of every run to find failures fast.",
+    "tools.h": "Other tools",
+    "t1.t": "Bulk email by workflow", "t1.p": "The Outlook template picks itself by department and workflow. JSON configuration and traceability of every send.",
+    "t2.t": "Huge-file lookup", "t2.p": "App to look up by account in text files of hundreds of MB without opening Excel. Delivered as an .exe.",
+    "t3.t": "PDF form generator", "t3.p": "Validates a quarterly Excel and generates one PDF per row plus a consolidated one. Migrated from Tkinter and Word to PyQt6.",
+    "t4.t": "Delinquency and amortization simulator", "t4.p": "Recalculates payments, delinquency and relief to handle customer claims, with SQL queries.",
+    "t5.t": "Bulk loading into a BPM platform", "t5.p": "Browser automation with Playwright to register cases in batches.",
+    "t6.t": "Power BI dashboards", "t6.p": "Operational tracking of accounts and cases for business areas.",
+    "note": "For confidentiality I don't publish code, data or names of internal systems. I'm happy to walk through any of these cases in an interview.",
+    "s.stack.t": "Everyday tools",
+    "s.stack.sub": "What I use in the projects above, not a list of courses.",
+    "st.1": "Data", "st.2": "Platform and quality", "st.3": "Apps and automation", "st.4": "Business and analytics",
+    "chip.stats": "Inferential statistics",
+    "a.t": "From payroll Excel to the data lake",
+    "a.p1": "I started out balancing payroll spreadsheets in Excel. The third time a task took me as long as the first, I automated it: first with formulas, then with macros, and later with Python, so I wouldn't depend on a macro nobody understood.",
+    "a.p2": "Today I work in data engineering at a bank: I migrate processes from Excel to Python, load histories into partitioned tables on Impala/HDFS, and build desktop tools with OCR, validations and audit trails.",
+    "a.p3": "I'm a psychologist by training (University of Panama) and spent close to five years in HR, compensation and payroll. That mix left me with one standing question before I move any data: who will use it, and what for.",
+    "a.path": "Career path",
+    "tl.1t": "Data Specialist · Banking", "tl.1d": "2026 – present · data engineering and automation",
+    "tl.2t": "HR compensation and controllership", "tl.2d": "Regional analyst",
+    "tl.3t": "Business Analytics", "tl.3d": "Financial data and SAP",
+    "tl.4t": "Compensation and HR data", "tl.4d": "Analyst",
+    "tl.5t": "Business Intelligence and process improvement", "tl.5d": "Analyst",
+    "tl.6t": "Business analysis and BI", "tl.6d": "Banking",
+    "tl.7t": "Bachelor's degree in Psychology", "tl.7d": "University of Panama",
+    "p.t": "Panama open data",
+    "p.name": "Panama labor market analysis",
+    "p.desc": "Gender pay gap, salary distribution, informality and the economically inactive population, using official data.",
+    "p.link": "View repository",
+    "ct.t": "Looking for someone for your data team?",
+    "ct.p": "I'm open to Data Engineering and Analytics Engineering roles, especially where data has to serve people: banking, HR, operations.",
+    "f.copy": "© 2026 Gerthmay Clair · Panama",
+    "f.top": "Back to top"
+  };
+
+  var nodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+  var attrNodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n-attr]"));
+  var ES = {};
+  nodes.forEach(function (el) { ES[el.getAttribute("data-i18n")] = el.classList.contains("t-text-soft") ? el.textContent : el.innerHTML; });
+  attrNodes.forEach(function (el) { var p = el.getAttribute("data-i18n-attr").split(":"); ES[p[1]] = el.getAttribute(p[0]); });
+  var dict = { es: ES, en: EN };
+  function tx(lang, key) { var v = dict[lang][key]; return v === undefined ? ES[key] : v; }
+
+  /* ── Transitions.dev · Text swap soft (verbatim) ── */
+  var ms = function (name) { return parseFloat(getComputedStyle(root).getPropertyValue(name)) || 0; };
+  function softSwap(el, next) {
+    var prev = el.dataset.text !== undefined ? el.dataset.text : el.textContent;
+    if (prev === next) return;
+    el.dataset.text = next;
+    clearTimeout(el._softTimer);
+    var out = document.createElement("span");
+    out.className = "t-text-soft-old"; out.setAttribute("aria-hidden", "true"); out.textContent = prev;
+    var inn = document.createElement("span");
+    inn.className = "t-text-soft-new"; inn.textContent = next;
+    var w0 = el.getBoundingClientRect().width;
+    el.classList.remove("is-swapping");
+    el.replaceChildren(out, inn);
+    var w1 = inn.getBoundingClientRect().width;
+    el.style.width = w0 + "px";
+    void el.offsetWidth;
+    el.classList.add("is-swapping");
+    el.style.width = w1 + "px";
+    el._softTimer = setTimeout(function () {
+      el.classList.remove("is-swapping");
+      el.style.removeProperty("width");
+      el.textContent = next;
+    }, Math.max(ms("--text-soft-dur"), ms("--text-soft-resize-dur")) + 40);
+  }
+
+  /* ── Transitions.dev · Tabs sliding (interruptor ES / EN) ── */
+  var bar = document.getElementById("lang");
+  var pill = bar.querySelector(".t-tabs-pill");
+  var tabs = Array.prototype.slice.call(bar.querySelectorAll(".t-tab"));
+  function moveTo(tab, animate) {
+    if (!animate) {
+      var prev = pill.style.transition;
+      pill.style.transition = "none";
+      pill.style.transform = "translateX(" + tab.offsetLeft + "px)";
+      pill.style.width = tab.offsetWidth + "px";
+      void pill.offsetWidth;
+      pill.style.transition = prev;
+    } else {
+      pill.style.transform = "translateX(" + tab.offsetLeft + "px)";
+      pill.style.width = tab.offsetWidth + "px";
+    }
+  }
+  function activeTab() { return tabs.filter(function (t) { return t.getAttribute("aria-pressed") === "true"; })[0] || tabs[0]; }
+
+  /* ── Idioma ── */
+  var cur = "es";
+  function applyAll(lang) {
+    nodes.forEach(function (el) { if (!el.classList.contains("t-text-soft")) el.innerHTML = tx(lang, el.getAttribute("data-i18n")); });
+    attrNodes.forEach(function (el) { var p = el.getAttribute("data-i18n-attr").split(":"); el.setAttribute(p[0], tx(lang, p[1])); });
+    root.lang = lang;
+    var og = document.querySelector('meta[property="og:locale"]');
+    if (og) og.setAttribute("content", lang === "en" ? "en_US" : "es_PA");
+  }
+  function setLang(lang, opts) {
+    opts = opts || {};
+    var animate = opts.animate !== false && !reduce.matches;
+    if (lang === cur) return;
+    cur = lang;
+    tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(t.getAttribute("data-lang") === lang)); });
+    moveTo(activeTab(), animate);
+    var soft = nodes.filter(function (el) { return el.classList.contains("t-text-soft"); });
+    if (!animate) {
+      applyAll(lang);
+      soft.forEach(function (el) { var v = tx(lang, el.getAttribute("data-i18n")); el.textContent = v; el.dataset.text = v; });
+    } else {
+      soft.forEach(function (el) { softSwap(el, tx(lang, el.getAttribute("data-i18n"))); });
+      root.classList.add("lang-out");
+      setTimeout(function () { applyAll(lang); root.classList.remove("lang-out"); }, ms("--duration-quick"));
+    }
+    if (opts.persist !== false) {
+      try { localStorage.setItem("lang", lang); } catch (e) {}
+      try { var u = new URL(location.href); u.searchParams.set("lang", lang); history.replaceState(null, "", u); } catch (e) {}
+    }
+  }
+  tabs.forEach(function (t) { t.addEventListener("click", function () { setLang(t.getAttribute("data-lang")); }); });
+  function initialLang() {
+    try { var q = new URLSearchParams(location.search).get("lang"); if (q === "en" || q === "es") return q; } catch (e) {}
+    try { var s = localStorage.getItem("lang"); if (s === "en" || s === "es") return s; } catch (e) {}
+    return ((navigator.language || "es").toLowerCase().indexOf("es") === 0) ? "es" : "en";
+  }
+  setLang(initialLang(), { animate: false, persist: false });
+
+  /* ── Accordion expand (casos y menú móvil) ── */
+  function setOpen(acc, open) {
+    acc.setAttribute("data-open", String(open));
+    var head = acc.querySelector(".t-acc-head");
+    head.setAttribute("aria-expanded", String(open));
+    var inner = acc.querySelector(".t-acc-panel-inner");
+    if (open) inner.removeAttribute("inert"); else inner.setAttribute("inert", "");
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".t-acc"), function (acc) {
+    setOpen(acc, acc.getAttribute("data-open") === "true");
+    acc.querySelector(".t-acc-head").addEventListener("click", function () { setOpen(acc, acc.getAttribute("data-open") !== "true"); });
+  });
+  var menu = document.querySelector(".navmenu");
+  Array.prototype.forEach.call(menu.querySelectorAll("a"), function (a) { a.addEventListener("click", function () { setOpen(menu, false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && menu.getAttribute("data-open") === "true") { setOpen(menu, false); menu.querySelector(".t-acc-head").focus(); } });
+  window.matchMedia("(min-width: 860px)").addEventListener("change", function (e) { if (e.matches) setOpen(menu, false); });
+
+  /* ── Sección actual en el menú ── */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".links a, .menu-list a:not(.btn)"));
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        navLinks.forEach(function (a) { if (a.getAttribute("href") === "#" + en.target.id) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current"); });
+        Array.prototype.forEach.call(document.querySelectorAll(".sec"), function (s) { s.classList.toggle("is-current", s === en.target); });
+      });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    ["casos", "stack", "sobre-mi", "contacto"].forEach(function (id) { var s = document.getElementById(id); if (s) io.observe(s); });
+  }
+
+  /* ── Fondo: las curvas de nivel se desplazan un poco más lento que el contenido (profundidad) ── */
+  var bgFixed = document.querySelector(".bg-fixed");
+  var parTick = false;
+  function parallax() {
+    parTick = false;
+    if (reduce.matches || !bgFixed) return;
+    var max = root.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    bgFixed.style.setProperty("--par", ((0.5 - p) * 0.14 * window.innerHeight).toFixed(1) + "px");
+  }
+  window.addEventListener("scroll", function () { if (!parTick) { parTick = true; requestAnimationFrame(parallax); } }, { passive: true });
+  window.addEventListener("resize", parallax);
+  parallax();
+
+  /* ── Texts reveal: el momento de entrada del hero ── */
+  var copy = document.getElementById("hero-copy");
+  var flow = document.getElementById("hero-flow");
+  var fontsReady = (document.fonts && document.fonts.ready) ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 700); })]) : Promise.resolve();
+  fontsReady.then(function () {
+    moveTo(activeTab(), false);
+    requestAnimationFrame(function () { copy.classList.add("is-shown"); flow.classList.add("is-shown"); });
+  });
+  window.addEventListener("resize", function () { moveTo(activeTab(), false); });
+})();
+</script>
 </body>
 </html>
